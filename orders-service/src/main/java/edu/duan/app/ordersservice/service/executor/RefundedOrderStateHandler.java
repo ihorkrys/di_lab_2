@@ -3,7 +3,6 @@ package edu.duan.app.ordersservice.service.executor;
 import edu.duan.app.api.OrderState;
 import edu.duan.app.ordersservice.data.OrderEntity;
 import edu.duan.app.ordersservice.data.OrderStateEntity;
-import edu.duan.app.ordersservice.exception.ItemStockNotFoundException;
 import edu.duan.app.ordersservice.exception.UnsupportedStateOfOrderException;
 import edu.duan.app.ordersservice.service.RabbitPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
