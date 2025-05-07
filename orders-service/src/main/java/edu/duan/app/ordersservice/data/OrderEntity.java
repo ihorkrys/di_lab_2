@@ -16,11 +16,11 @@ import java.sql.Timestamp;
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orders_generator")
-    private int id;
-    private int userId;
-    @ManyToOne(cascade=CascadeType.ALL)
-    private ItemEntity item;
+    private long id;
+    private long userId;
+    private long itemId;
     private int count;
+    private double itemPrice;
     private double total;
     @Enumerated(value = EnumType.STRING)
     private OrderStateEntity state;

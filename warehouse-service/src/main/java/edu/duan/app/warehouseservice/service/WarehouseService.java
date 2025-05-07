@@ -21,7 +21,7 @@ public class WarehouseService {
         return warehouseRepository.findAll().stream().map(this::convertToApi).toList();
     }
 
-    public WarehouseItem getById(int id) {
+    public WarehouseItem getById(long id) {
         return warehouseRepository.findById(id).map(this::convertToApi).orElseThrow(warehouseItemNotFoundException(id));
     }
 
@@ -31,7 +31,7 @@ public class WarehouseService {
     }
 
     @Transactional
-    public WarehouseItem updateStock(int itemId, int count) {
+    public WarehouseItem updateStock(long itemId, int count) {
         WarehouseEntity warehouseEntity = warehouseRepository.findFirstByItemId(itemId).orElseThrow(itemStockNotFoundException(itemId));
         warehouseEntity.setInStock(count);
         return convertToApi(warehouseEntity);
@@ -59,11 +59,11 @@ public class WarehouseService {
         return warehouseEntity;
     }
 
-    private static Supplier<WarehouseItemNotFoundException> warehouseItemNotFoundException(int id) {
+    private static Supplier<WarehouseItemNotFoundException> warehouseItemNotFoundException(long id) {
         return () -> new WarehouseItemNotFoundException("Warehouse item with `" + id + "` not found");
     }
 
-    private static Supplier<ItemStockNotFoundException> itemStockNotFoundException(int id) {
+    private static Supplier<ItemStockNotFoundException> itemStockNotFoundException(long id) {
         return () -> new ItemStockNotFoundException("Item with `" + id + "` not found in warehouse");
     }
 }

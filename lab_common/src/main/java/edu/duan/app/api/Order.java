@@ -11,10 +11,11 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
-    private int id;
-    private int userId;
-    private OrderItem orderItem;
+    private long id;
+    private long userId;
+    private long itemId;
     private int count;
+    private double itemPrice;
     private double total;
     private OrderState orderState;
     private String stateReasonCode;

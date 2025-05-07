@@ -3,7 +3,6 @@ package edu.duan.app.usersservice.controller;
 import edu.duan.app.api.User;
 import edu.duan.app.usersservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +24,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Integer id) {
+    public User getUserById(@PathVariable("id") Long id) {
         return userService.getUser(id);
     }
 

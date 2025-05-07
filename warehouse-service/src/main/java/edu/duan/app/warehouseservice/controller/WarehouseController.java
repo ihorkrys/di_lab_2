@@ -16,7 +16,7 @@ public class WarehouseController {
     }
 
     @GetMapping(path = "/{id}")
-    public WarehouseItem get(@PathVariable int id) {
+    public WarehouseItem get(@PathVariable("id") long id) {
         return warehouseService.getById(id);
     }
 
@@ -31,7 +31,7 @@ public class WarehouseController {
     }
 
     @PutMapping("/{itemId}/{count}")
-    public @ResponseBody WarehouseItem updateItem(@PathVariable int itemId, @PathVariable int count) {
+    public @ResponseBody WarehouseItem updateItem(@PathVariable("itemId") long itemId, @PathVariable("count") int count) {
         return warehouseService.updateStock(itemId, count);
     }
 }

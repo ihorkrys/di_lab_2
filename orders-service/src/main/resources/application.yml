@@ -1,8 +1,10 @@
+server:
+  port: 8080
 spring:
   application:
     name: orders-service
   datasource:
-    url: jdbc:postgresql://postgredb:5433/di_lab_2
+    url: jdbc:postgresql://192.168.1.240:5433/di_lab_2
     username: auto_test
     password: 123456
     driver-class-name: org.postgresql.Driver
@@ -14,7 +16,14 @@ spring:
         default_schema: orders_service
     generate-ddl: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
   rabbitmq:
-    host: localhost
+    host: 192.168.1.240
     port: 5672
+    deserialization:
+      trusted-packages: "*"
+  liquibase:
+    change-log: classpath:db/master.xml
+    enabled: true
+    drop-first: true
+    default-schema: orders_service

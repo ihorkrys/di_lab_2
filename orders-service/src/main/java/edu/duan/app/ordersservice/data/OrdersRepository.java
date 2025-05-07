@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface OrdersRepository extends JpaRepository<OrderEntity, Integer> {
+public interface OrdersRepository extends JpaRepository<OrderEntity, Long> {
 
-    Optional<OrderEntity> findById(Integer id);
-    List<OrderEntity> findAllByUserId(Integer userId);
+    Optional<OrderEntity> findById(Long id);
+    List<OrderEntity> findAllByUserId(Long userId);
     List<OrderEntity> findAllByCreatedDateBetween(Date startDate, Date endDate);
-    List<OrderEntity> findAllByUserIdAndState(Integer userId, OrderStateEntity state);
+    List<OrderEntity> findAllByUserIdAndState(Long userId, OrderStateEntity state);
     List<OrderEntity> findAllByState(OrderStateEntity state);
 }

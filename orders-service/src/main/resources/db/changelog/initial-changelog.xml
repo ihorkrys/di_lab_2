@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.23.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1731776365044-2" author="ihorkr">
+        <createSequence incrementBy="1" sequenceName="orders_seq" startValue="5"/>
+    </changeSet>
+    <changeSet id="1731776365044-6" author="ihorkr">
+        <createTable tableName="orders">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_orders"/>
+            </column>
+            <column name="user_id" type="BIGINT"/>
+            <column name="item_id" type="BIGINT"/>
+            <column name="count" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="item_price" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="VARCHAR(255)"/>
+            <column name="state_reason_code" type="VARCHAR(255)"/>
+            <column name="fulfillment_notes" type="VARCHAR(255)"/>
+            <column name="notes" type="VARCHAR(255)"/>
+            <column name="created_date" type="DATETIME"/>
+            <column name="updated_date" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1731776365044-7" author="ihorkr">
+        <insert tableName="orders">
+            <column name="id" valueNumeric="1"/>
+            <column name="user_id" valueNumeric="1"/> <!-- alice -->
+            <column name="item_id" valueNumeric="2"/> <!-- Smartphone -->
+            <column name="count" valueNumeric="2"/>
+            <column name="item_price" valueNumeric="799.99"/>
+            <column name="total" valueNumeric="1599.98"/>
+            <column name="state" value="CANCELLED"/>
+            <column name="fulfillment_notes" value="Will be shipped within 3 days"/>
+            <column name="notes" value="Express delivery"/>
+            <column name="created_date" valueDate="2024-05-01T10:00:00"/>
+            <column name="updated_date" valueDate="2024-05-01T10:00:00"/>
+        </insert>
+
+        <insert tableName="orders">
+            <column name="id" valueNumeric="2"/>
+            <column name="user_id" valueNumeric="2"/> <!-- bob -->
+            <column name="item_id" valueNumeric="1"/> <!-- Laptop -->
+            <column name="count" valueNumeric="1"/>
+            <column name="item_price" valueNumeric="1200.00"/>
+            <column name="total" valueNumeric="1200.00"/>
+            <column name="state" value="PROCESSING"/>
+            <column name="fulfillment_notes" value="In progress"/>
+            <column name="notes" value="Gift package"/>
+            <column name="created_date" valueDate="2024-05-02T14:30:00"/>
+            <column name="updated_date" valueDate="2024-05-03T09:15:00"/>
+        </insert>
+
+        <insert tableName="orders">
+            <column name="id" valueNumeric="3"/>
+            <column name="user_id" valueNumeric="3"/> <!-- charlie -->
+            <column name="item_id" valueNumeric="3"/> <!-- Headphones -->
+            <column name="count" valueNumeric="3"/>
+            <column name="item_price" valueNumeric="199.50"/>
+            <column name="total" valueNumeric="598.50"/>
+            <column name="state" value="COMPLETED"/>
+            <column name="fulfillment_notes" value="Delivered"/>
+            <column name="notes" value="No issues"/>
+            <column name="created_date" valueDate="2024-05-03T08:00:00"/>
+            <column name="updated_date" valueDate="2024-05-05T16:45:00"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

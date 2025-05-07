@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.23.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="0-users-seq" author="ihorkr">
+        <createSequence incrementBy="1" sequenceName="users_seq" startValue="5"/>
+    </changeSet>
+    <changeSet id="1-create-users" author="ihorkr">
+        <createTable tableName="users">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="login" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2-insert-users" author="ihorkr">
+        <insert tableName="users">
+            <column name="id" valueNumeric="1"/>
+            <column name="login" value="alice@example.com"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" valueNumeric="2"/>
+            <column name="login" value="bob@example.com"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" valueNumeric="3"/>
+            <column name="login" value="charlie@example.com"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

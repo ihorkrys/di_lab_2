@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.23.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1731776365044-1" author="ihorkr">
+        <createSequence incrementBy="1" sequenceName="items_seq" startValue="5"/>
+    </changeSet>
+    <changeSet id="1731776365044-4" author="ihorkr">
+        <createSequence incrementBy="1" sequenceName="warehouse_seq" startValue="5"/>
+    </changeSet>
+    <changeSet id="1731776365044-5" author="ihorkr">
+        <createTable tableName="items">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_items"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="price" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1731776365044-8" author="ihorkr">
+        <createTable tableName="warehouse">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_warehouse"/>
+            </column>
+            <column name="item_id" type="BIGINT"/>
+            <column name="in_stock" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1731776365044-12" author="ihorkr">
+        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="warehouse"
+                                 constraintName="FK_WAREHOUSE_ON_ITEM" referencedColumnNames="id"
+                                 referencedTableName="items"/>
+    </changeSet>
+    <changeSet id="1731776365044-13" author="ihorkr">
+        <!-- Insert items -->
+        <insert tableName="items">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Laptop"/>
+            <column name="description" value="14 inch, 16GB RAM"/>
+            <column name="price" valueNumeric="1200.00"/>
+        </insert>
+        <insert tableName="items">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="Smartphone"/>
+            <column name="description" value="5G, 128GB Storage"/>
+            <column name="price" valueNumeric="799.99"/>
+        </insert>
+        <insert tableName="items">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="Headphones"/>
+            <column name="description" value="Noise Cancelling"/>
+            <column name="price" valueNumeric="199.50"/>
+        </insert>
+
+        <!-- Insert warehouse stock for each item -->
+        <insert tableName="warehouse">
+            <column name="id" valueNumeric="1"/>
+            <column name="item_id" valueNumeric="1"/>
+            <column name="in_stock" valueNumeric="50"/>
+        </insert>
+        <insert tableName="warehouse">
+            <column name="id" valueNumeric="2"/>
+            <column name="item_id" valueNumeric="2"/>
+            <column name="in_stock" valueNumeric="120"/>
+        </insert>
+        <insert tableName="warehouse">
+            <column name="id" valueNumeric="3"/>
+            <column name="item_id" valueNumeric="3"/>
+            <column name="in_stock" valueNumeric="75"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

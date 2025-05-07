@@ -16,7 +16,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User getUser(int id) {
+    public User getUser(long id) {
         UserEntity userEntity = userRepository.getReferenceById(id);
         return new User(userEntity.getId(), userEntity.getLogin());
     }
@@ -26,7 +26,9 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        UserEntity userEntity = userRepository.save(new UserEntity(user.getId(), user.getLogin()));
-        return new User(userEntity.getId(), userEntity.getLogin());
+        UserEntity userEntity = new UserEntity();
+        userEntity.setLogin(user.getLogin());
+        UserEntity createEntity = userRepository.save(userEntity);
+        return new User(createEntity.getId(), createEntity.getLogin());
     }
 }

@@ -18,6 +18,7 @@ public class EventListener {
     @RabbitListener(queues = "user.queue")
     @Transactional
     public void handleOrder(UserEvent event) {
+        System.out.println("Received user event: " + event);
         if (event.isExist()) {
             ordersService.processOrder(event.getOrderId(), OrderState.PROCESSING, null, null, null);
         } else {

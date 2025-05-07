@@ -19,27 +19,27 @@ public class OrdersController {
     }
 
     @GetMapping(path = "/{id}")
-    public Order get(@PathVariable int id) {
+    public Order get(@PathVariable("id") long id) {
         return ordersService.get(id);
     }
 
-    @GetMapping("/for/user")
-    public List<Order> getAllForUser(@RequestParam int userId) {
+    @GetMapping("/for/user/{id}")
+    public List<Order> getAllForUser(@PathVariable("id") long userId) {
         return ordersService.getAllForUser(userId);
     }
 
-    @GetMapping(path = "/for/user/by/state")
-    public List<Order> getAllForUserByState(@RequestParam int userId, @RequestParam OrderState state) {
+    @GetMapping(path = "/for/user/{id}/by/state/{state}")
+    public List<Order> getAllForUserByState(@PathVariable("id") long userId, @PathVariable("state") OrderState state) {
         return ordersService.getAllForUserByState(userId, state);
     }
 
     @GetMapping(path = "/by/date")
-    public List<Order> getByCreatedDate(@RequestParam long from, @RequestParam long to) {
+    public List<Order> getByCreatedDate(@RequestParam("from") long from, @RequestParam("to") long to) {
         return ordersService.getByCreatedDate(from, to);
     }
 
     @PostMapping()
-    public @ResponseBody OrderState placeOrder(@RequestBody OrderRequest order) {
+    public @ResponseBody Order placeOrder(@RequestBody OrderRequest order) {
         return ordersService.placeOrder(order);
     }
 

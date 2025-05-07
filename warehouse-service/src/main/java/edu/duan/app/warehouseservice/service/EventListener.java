@@ -29,6 +29,7 @@ public class EventListener {
     @RabbitListener(queues = "order.queue")
     @Transactional
     public void handleOrder(OrderEvent event) {
+        System.out.println("Start processing" + event.toString());
         switch (event.getOrderState()) {
             case PROCESSING -> warehouseRepository.findById(event.getItemId()).ifPresentOrElse(
                     warehouseEntity -> {

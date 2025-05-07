@@ -14,5 +14,6 @@ public class RabbitPublisher {
 
     public void publishOrderEvent(OrderEvent orderEvent) {
         rabbitTemplate.convertAndSend("lab2.topic", "order.events", orderEvent);
+        System.out.println("Order Event Published");
     }
 }

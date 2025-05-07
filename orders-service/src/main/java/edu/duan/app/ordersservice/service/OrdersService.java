@@ -1,7 +1,7 @@
 package edu.duan.app.ordersservice.service;
 
 import edu.duan.app.api.Order;
-import edu.duan.app.api.OrderItem;
+import edu.duan.app.api.OrderEvent;
 import edu.duan.app.api.OrderState;
 import edu.duan.app.api.OrderRequest;
 import edu.duan.app.ordersservice.data.*;
@@ -20,14 +20,14 @@ import java.util.function.Supplier;
 @AllArgsConstructor
 public class OrdersService {
     private OrdersRepository ordersRepository;
-    private ItemsRepository itemsRepository;
     private OrderStateProvider orderStateProvider;
+    private RabbitPublisher rabbitPublisher;
 
-    public Order get(int id) {
+    public Order get(long id) {
         return ordersRepository.findById(id).map(this::convertToApi).orElseThrow(orderNotFoundException(id));
     }
 
-    public List<Order> getAllForUser(Integer userId) {
+    public List<Order> getAllForUser(Long userId) {
         return ordersRepository.findAllByUserId(userId).stream().map(this::convertToApi).toList();
     }
 
@@ -36,7 +36,7 @@ public class OrdersService {
                 .stream().map(this::convertToApi).toList();
     }
 
-    public List<Order> getAllForUserByState(Integer userId, OrderState orderState) {
+    public List<Order> getAllForUserByState(Long userId, OrderState orderState) {
         return ordersRepository.findAllByUserIdAndState(userId, OrderStateEntity.valueOf(orderState.name()))
                 .stream().map(this::convertToApi).toList();
     }
@@ -48,22 +48,25 @@ public class OrdersService {
 
 
     @Transactional
-    public OrderState placeOrder(OrderRequest orderRequest) {
+    public Order placeOrder(OrderRequest orderRequest) {
         Order order = new Order();
-        OrderItem orderItem = new OrderItem();
-        order.setUserId(order.getUserId());
-        orderItem.setId(orderRequest.getItemId());
-        order.setOrderItem(orderItem);
+        order.setUserId(orderRequest.getUserId());
+        order.setItemId(orderRequest.getItemId());
         order.setOrderState(OrderState.NEW);
         order.setCount(orderRequest.getCount());
-        OrderEntity orderEntity = convertToDomain(order, getItemEntity(order.getOrderItem()));
+        order.setItemPrice(orderRequest.getPrice());
+        OrderEntity orderEntity = convertToDomain(order);
         OrderStateEntity orderStateEntity = orderStateProvider.getOrderStateHandler(order.getOrderState()).handle(orderEntity);
-        ordersRepository.save(orderEntity);
-        return OrderState.valueOf(orderStateEntity.name());
+        orderEntity.setState(orderStateEntity);
+        OrderEntity newOrder = ordersRepository.save(orderEntity);
+        rabbitPublisher.publishOrderEvent(buildOrderEvent(newOrder));
+        return convertToApi(newOrder);
     }
 
     @Transactional
-    public OrderState processOrder(int orderId, OrderState newOrderState, String notes, String fulfillmentNotes, String reason) {
+    public OrderState processOrder(long orderId, OrderState newOrderState, String notes, String fulfillmentNotes, String reason) {
+        System.out.println("Start processing order " + orderId);
+        System.out.println("State " + newOrderState);
         OrderEntity orderEntity = ordersRepository.findById(orderId).orElseThrow(orderNotFoundException(orderId));
 
         if (notes != null && !notes.isBlank()) {
@@ -76,13 +79,12 @@ public class OrdersService {
             orderEntity.setFulfillmentNotes(fulfillmentNotes);
         }
         OrderStateEntity orderStateEntity = orderStateProvider.getOrderStateHandler(newOrderState).handle(orderEntity);
+        orderEntity.setState(orderStateEntity);
+        OrderEntity newStateOrder = ordersRepository.save(orderEntity);
+        System.out.println("Processed order " + orderId);
+        System.out.println("State " + newStateOrder.getState());
+        rabbitPublisher.publishOrderEvent(buildOrderEvent(newStateOrder));
         return OrderState.valueOf(orderStateEntity.name());
-    }
-
-    private ItemEntity getItemEntity(OrderItem orderItem) {
-        return itemsRepository
-                .findById(orderItem.getId())
-                .orElseThrow(itemNotFoundException(orderItem.getId()));
     }
 
     private Order convertToApi(OrderEntity orderEntity) {
@@ -92,6 +94,7 @@ public class OrdersService {
         order.setTotal(orderEntity.getTotal());
         order.setNotes(orderEntity.getNotes());
         order.setFulfillmentNotes(orderEntity.getFulfillmentNotes());
+        order.setItemId(orderEntity.getItemId());
 
 
         if (orderEntity.getCreatedDate() != null) {
@@ -103,24 +106,15 @@ public class OrdersService {
         if (orderEntity.getState() != null) {
             order.setOrderState(OrderState.valueOf(orderEntity.getState().name()));
         }
-        if (orderEntity.getItem() != null) {
-            OrderItem orderItem = new OrderItem();
-            ItemEntity itemEntity = orderEntity.getItem();
-            orderItem.setId(itemEntity.getId());
-            orderItem.setName(itemEntity.getName());
-            orderItem.setDescription(itemEntity.getDescription());
-            orderItem.setPrice(itemEntity.getPrice());
-            order.setOrderItem(orderItem);
-        }
         return order;
     }
 
-    private OrderEntity convertToDomain(Order order, ItemEntity itemEntity) {
+    private OrderEntity convertToDomain(Order order) {
         OrderEntity orderEntity = new OrderEntity();
-        orderEntity.setItem(itemEntity);
+        orderEntity.setItemId(order.getItemId());
         orderEntity.setUserId(order.getUserId());
         orderEntity.setCount(order.getCount());
-        orderEntity.setTotal(itemEntity.getPrice() * order.getCount());
+        orderEntity.setTotal(order.getItemPrice() * order.getCount());
         orderEntity.setNotes(order.getNotes());
         orderEntity.setFulfillmentNotes(order.getFulfillmentNotes());
         orderEntity.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
@@ -128,11 +122,22 @@ public class OrdersService {
         return orderEntity;
     }
 
-    private static Supplier<OrderNotFoundException> orderNotFoundException(int id) {
+
+    private OrderEvent buildOrderEvent(OrderEntity orderEntity) {
+        return OrderEvent.builder()
+                .withId(orderEntity.getId())
+                .withItemId(orderEntity.getItemId())
+                .withUserId(orderEntity.getUserId())
+                .withCount(orderEntity.getCount())
+                .withOrderState(OrderState.valueOf(orderEntity.getState().name()))
+                .build();
+    }
+
+    private static Supplier<OrderNotFoundException> orderNotFoundException(long id) {
         return () -> new OrderNotFoundException("Order with `" + id + "` not found");
     }
 
-    private static Supplier<ItemNotFoundException> itemNotFoundException(int id) {
+    private static Supplier<ItemNotFoundException> itemNotFoundException(long id) {
         return () -> new ItemNotFoundException("Order with `" + id + "` not found");
     }
 }

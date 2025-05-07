@@ -15,7 +15,7 @@ import lombok.Setter;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_generator")
-    private int id;
+    private long id;
     @Column(unique=true)
     private String login;
 }

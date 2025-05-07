@@ -27,11 +27,9 @@ public class ProcessingOrderStateHandler implements OrderStateHandler {
     public OrderStateEntity handle(OrderEntity orderEntity) {
         switch(orderEntity.getState()) {
             case NEW -> {
-                orderEntity.setState(OrderStateEntity.PROCESSING);
-                rabbitPublisher.publishOrderEvent(buildOrderEvent(orderEntity));
+                return OrderStateEntity.PROCESSING;
             }
             default -> throw new UnsupportedStateOfOrderException("Order state not supported. State: " + orderEntity.getState());
         }
-        return orderEntity.getState();
     }
 }

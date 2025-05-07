@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface WarehouseRepository extends JpaRepository<WarehouseEntity, Integer> {
-    Optional<WarehouseEntity> findFirstByItemId(Integer id);
+public interface WarehouseRepository extends JpaRepository<WarehouseEntity, Long> {
+    Optional<WarehouseEntity> findFirstByItemId(Long id);
 }
