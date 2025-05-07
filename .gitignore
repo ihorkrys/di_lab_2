@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+/lab_common/target/
+/orders-service/target/
+/warehouse-service/target/
+/users-service/target/
