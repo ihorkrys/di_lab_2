@@ -27,3 +27,8 @@ spring:
     enabled: true
     drop-first: true
     default-schema: orders_service
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
