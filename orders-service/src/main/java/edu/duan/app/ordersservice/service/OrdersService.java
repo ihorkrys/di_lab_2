@@ -55,6 +55,8 @@ public class OrdersService {
         order.setOrderState(OrderState.NEW);
         order.setCount(orderRequest.getCount());
         order.setItemPrice(orderRequest.getPrice());
+        order.setNotes(orderRequest.getNotes());
+        order.setFulfillmentNotes(orderRequest.getFulfillmentNotes());
         OrderEntity orderEntity = convertToDomain(order);
         OrderStateEntity orderStateEntity = orderStateProvider.getOrderStateHandler(order.getOrderState()).handle(orderEntity);
         orderEntity.setState(orderStateEntity);
@@ -95,6 +97,8 @@ public class OrdersService {
         order.setNotes(orderEntity.getNotes());
         order.setFulfillmentNotes(orderEntity.getFulfillmentNotes());
         order.setItemId(orderEntity.getItemId());
+        order.setUserId(orderEntity.getUserId());
+        order.setItemPrice(orderEntity.getItemPrice());
 
 
         if (orderEntity.getCreatedDate() != null) {
@@ -114,6 +118,7 @@ public class OrdersService {
         orderEntity.setItemId(order.getItemId());
         orderEntity.setUserId(order.getUserId());
         orderEntity.setCount(order.getCount());
+        orderEntity.setItemPrice(order.getItemPrice());
         orderEntity.setTotal(order.getItemPrice() * order.getCount());
         orderEntity.setNotes(order.getNotes());
         orderEntity.setFulfillmentNotes(order.getFulfillmentNotes());

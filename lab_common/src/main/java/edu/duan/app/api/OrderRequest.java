@@ -2,11 +2,10 @@ package edu.duan.app.api;
 
 import lombok.*;
 
-@Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class OrderRequest {
     private long userId;
     private long itemId;

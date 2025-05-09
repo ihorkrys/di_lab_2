@@ -1,12 +1,12 @@
 package edu.duan.app.api;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class ProcessingOrder {
-    private int id;
+    private long id;
     private OrderState orderState;
     private String notes;
     private String fulfillmentNotes;

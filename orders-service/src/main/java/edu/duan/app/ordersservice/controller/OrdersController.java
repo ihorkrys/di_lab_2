@@ -35,7 +35,7 @@ public class OrdersController {
             @ApiResponse(responseCode = "404", description = "Замовлення не знайдено")
     })
     @GetMapping(path = "/{id}")
-    public Order get(
+    public @ResponseBody Order get(
             @Parameter(description = "ID замовлення, яке потрібно отримати") @PathVariable("id") long id) {
         return ordersService.get(id);
     }
@@ -47,7 +47,7 @@ public class OrdersController {
                             schema = @Schema(implementation = Order.class)))
     })
     @GetMapping("/for/user/{id}")
-    public List<Order> getAllForUser(
+    public @ResponseBody List<Order> getAllForUser(
             @Parameter(description = "ID користувача, чиї замовлення потрібно отримати") @PathVariable("id") long userId) {
         return ordersService.getAllForUser(userId);
     }
@@ -59,7 +59,7 @@ public class OrdersController {
                             schema = @Schema(implementation = Order.class)))
     })
     @GetMapping(path = "/for/user/{id}/by/state/{state}")
-    public List<Order> getAllForUserByState(
+    public @ResponseBody List<Order> getAllForUserByState(
             @Parameter(description = "ID користувача, чиї замовлення потрібно отримати") @PathVariable("id") long userId,
             @Parameter(description = "Стан замовлення для фільтрації") @PathVariable("state") OrderState state) {
         return ordersService.getAllForUserByState(userId, state);
@@ -72,7 +72,7 @@ public class OrdersController {
                             schema = @Schema(implementation = Order.class)))
     })
     @GetMapping(path = "/by/date")
-    public List<Order> getByCreatedDate(
+    public @ResponseBody List<Order> getByCreatedDate(
             @Parameter(description = "Початок діапазону дат (timestamp)") @RequestParam("from") long from,
             @Parameter(description = "Кінець діапазону дат (timestamp)") @RequestParam("to") long to) {
         return ordersService.getByCreatedDate(from, to);

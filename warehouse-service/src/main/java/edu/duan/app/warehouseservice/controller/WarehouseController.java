@@ -20,7 +20,7 @@ public class WarehouseController {
         return warehouseService.getById(id);
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public List<WarehouseItem> getAll() {
         return warehouseService.getAll();
     }

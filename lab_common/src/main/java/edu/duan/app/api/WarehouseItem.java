@@ -1,10 +1,12 @@
 package edu.duan.app.api;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class WarehouseItem {
     private int id;
     private String name;

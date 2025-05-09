@@ -75,14 +75,7 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>4.26.0</version> <!-- актуальна версія -->
-        </dependency>
-        <!-- JUnit Platform Launcher -->
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-launcher</artifactId>
-            <version>1.10.2</version>
-            <scope>test</scope>
+            <version>4.26.0</version>
         </dependency>
     </dependencies>
     <dependencyManagement>
@@ -90,7 +83,7 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
-                <version>6.2.6</version> <!-- Вказати точно твою версію -->
+                <version>6.2.6</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

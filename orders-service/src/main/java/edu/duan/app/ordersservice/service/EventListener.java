@@ -5,14 +5,12 @@ import edu.duan.app.api.OrderState;
 import edu.duan.app.api.UserEvent;
 import lombok.AllArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
 public class EventListener {
-    @Autowired
     private OrdersService ordersService;
 
     @RabbitListener(queues = "user.queue")

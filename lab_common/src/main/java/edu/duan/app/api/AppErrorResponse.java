@@ -1,14 +1,10 @@
 package edu.duan.app.api;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
+@Data
 public class AppErrorResponse {
     private int code;
     private String message;
