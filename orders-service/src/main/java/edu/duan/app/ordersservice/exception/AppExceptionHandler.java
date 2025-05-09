@@ -31,4 +31,31 @@ public class AppExceptionHandler {
     public @ResponseBody AppErrorResponse handleItemNotFoundException(ItemNotFoundException e) {
         return new AppErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
     }
+
+    //lab 4 errors
+    /*
+            case IO_EXCEPTION -> throw new IOException(responseCode);
+            case SQL_EXCEPTION -> throw new SQLException(responseCode);
+            case PARSE_EXCEPTION -> throw new ParseException(responseCode, -1);
+            case CLASS_NOT_FOUND_EXCEPTION -> throw new ClassNotFoundException(responseCode);
+            case METHOD_NOT_FOUND_EXCEPTION -> throw new MethodNotFoundException(responseCode);
+     */
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public @ResponseBody AppErrorResponse handleItemNotFoundException(Exception e) {
+        return new AppErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+    }
+
+    /*
+            case NPE_EXCEPTION -> throw new NullPointerException(responseCode);
+            case ARITHMETIC_EXCEPTION -> throw new ArithmeticException(responseCode);
+            case ARRAY_INDEX_EXCEPTION -> throw new ArrayIndexOutOfBoundsException(responseCode);
+            case CLASS_CAST_EXCEPTION -> throw new ClassCastException(responseCode);
+            case ILLEGAL_ARGUMENT_EXCEPTION -> throw new IllegalArgumentException(responseCode);
+     */
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public @ResponseBody AppErrorResponse handleItemNotFoundException(RuntimeException e) {
+        return new AppErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+    }
 }
